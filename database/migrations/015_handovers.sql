@@ -3,7 +3,23 @@
 -- Supervised physical return of an item after a claim is approved.
 -- =====================================================================
 
+-- ---------------------------------------------------------------------
+-- Secure handover code generator, format UG-LF-82941.
+-- Uses pgcrypto randomness; created here because the table defaults to it.
+-- ---------------------------------------------------------------------
+create or replace function public.generate_handover_code()
+returns text
+language sql
+volatile
+as $$
+  select 'UG-LF-' || lpad(((random() * 89999)::int + 10000)::text, 5, '0');
+$$;
+
+comment on function public.generate_handover_code() is
+  'Generates a 5-digit handover verification code (UG-LF-#####) used to prove both parties met in person.';
+
 create table if not exists public.handovers (
+
   id                uuid primary key default gen_random_uuid(),
   claim_id          uuid not null unique references public.claims (id) on delete cascade,
   item_id           uuid not null references public.items (id) on delete cascade,
