@@ -32,7 +32,7 @@ export const Route = createFileRoute("/report")({
       },
     ],
   }),
-  component: Report;
+  component: Report,
 });
 
 const stepTitles = ["Type", "Item details", "Where & when", "Private details", "Review"];
