@@ -104,8 +104,10 @@ function ItemDetail() {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Button size="lg" className="sm:flex-1">
-            <ShieldCheck className="mr-2 h-4 w-4" /> This is mine — start claim
+          <Button asChild size="lg" className="sm:flex-1">
+            <Link to="/items/$itemId/claim" params={{ itemId: item.id }}>
+              <ShieldCheck className="mr-2 h-4 w-4" /> This is mine — start claim
+            </Link>
           </Button>
           <Button size="lg" variant="outline" className="sm:flex-1">
             Report a concern

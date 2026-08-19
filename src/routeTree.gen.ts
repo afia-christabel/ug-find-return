@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as ItemsItemIdRouteImport } from './routes/items.$itemId'
+import { Route as ItemsItemIdClaimRouteImport } from './routes/items.$itemId.claim'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +33,16 @@ const BrowseRoute = BrowseRouteImport.update({
   path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
@@ -40,43 +53,84 @@ const ItemsItemIdRoute = ItemsItemIdRouteImport.update({
   path: '/items/$itemId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ItemsItemIdClaimRoute = ItemsItemIdClaimRouteImport.update({
+  id: '/claim',
+  path: '/claim',
+  getParentRoute: () => ItemsItemIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
+  '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
-  '/items/$itemId': typeof ItemsItemIdRoute
+  '/items/$itemId': typeof ItemsItemIdRouteWithChildren
+  '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
+  '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
-  '/items/$itemId': typeof ItemsItemIdRoute
+  '/items/$itemId': typeof ItemsItemIdRouteWithChildren
+  '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
+  '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
-  '/items/$itemId': typeof ItemsItemIdRoute
+  '/items/$itemId': typeof ItemsItemIdRouteWithChildren
+  '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/browse' | '/report' | '/items/$itemId'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/browse'
+    | '/dashboard'
+    | '/notifications'
+    | '/report'
+    | '/items/$itemId'
+    | '/items/$itemId/claim'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/browse' | '/report' | '/items/$itemId'
-  id: '__root__' | '/' | '/admin' | '/browse' | '/report' | '/items/$itemId'
+  to:
+    | '/'
+    | '/admin'
+    | '/browse'
+    | '/dashboard'
+    | '/notifications'
+    | '/report'
+    | '/items/$itemId'
+    | '/items/$itemId/claim'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/browse'
+    | '/dashboard'
+    | '/notifications'
+    | '/report'
+    | '/items/$itemId'
+    | '/items/$itemId/claim'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   BrowseRoute: typeof BrowseRoute
+  DashboardRoute: typeof DashboardRoute
+  NotificationsRoute: typeof NotificationsRoute
   ReportRoute: typeof ReportRoute
-  ItemsItemIdRoute: typeof ItemsItemIdRoute
+  ItemsItemIdRoute: typeof ItemsItemIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -102,6 +156,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/report': {
       id: '/report'
       path: '/report'
@@ -116,15 +184,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ItemsItemIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/items/$itemId/claim': {
+      id: '/items/$itemId/claim'
+      path: '/claim'
+      fullPath: '/items/$itemId/claim'
+      preLoaderRoute: typeof ItemsItemIdClaimRouteImport
+      parentRoute: typeof ItemsItemIdRoute
+    }
   }
 }
+
+interface ItemsItemIdRouteChildren {
+  ItemsItemIdClaimRoute: typeof ItemsItemIdClaimRoute
+}
+
+const ItemsItemIdRouteChildren: ItemsItemIdRouteChildren = {
+  ItemsItemIdClaimRoute: ItemsItemIdClaimRoute,
+}
+
+const ItemsItemIdRouteWithChildren = ItemsItemIdRoute._addFileChildren(
+  ItemsItemIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   BrowseRoute: BrowseRoute,
+  DashboardRoute: DashboardRoute,
+  NotificationsRoute: NotificationsRoute,
   ReportRoute: ReportRoute,
-  ItemsItemIdRoute: ItemsItemIdRoute,
+  ItemsItemIdRoute: ItemsItemIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
