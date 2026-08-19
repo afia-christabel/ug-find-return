@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, Search, PlusCircle, Home, PackageSearch, Shield } from "lucide-react";
+import {
+  Menu,
+  Search,
+  PlusCircle,
+  Home,
+  PackageSearch,
+  Shield,
+  Bell,
+  LayoutDashboard,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -8,6 +17,8 @@ const nav = [
   { to: "/", label: "Home", icon: Home },
   { to: "/browse", label: "Browse", icon: PackageSearch },
   { to: "/report", label: "Report", icon: PlusCircle },
+  { to: "/dashboard", label: "Activity", icon: LayoutDashboard },
+  { to: "/notifications", label: "Alerts", icon: Bell },
   { to: "/admin", label: "Admin", icon: Shield },
 ] as const;
 
