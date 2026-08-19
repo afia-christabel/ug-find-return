@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as ItemsItemIdRouteImport } from './routes/items.$itemId'
 import { Route as ItemsItemIdClaimRouteImport } from './routes/items.$itemId.claim'
@@ -29,6 +30,11 @@ const AdminRoute = AdminRouteImport.update({
 const BrowseRoute = BrowseRouteImport.update({
   id: '/browse',
   path: '/browse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportRoute = ReportRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
   '/report': typeof ReportRoute
   '/items/$itemId': typeof ItemsItemIdRouteWithChildren
   '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
   '/report': typeof ReportRoute
   '/items/$itemId': typeof ItemsItemIdRouteWithChildren
   '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
+  '/dashboard': typeof DashboardRoute
   '/report': typeof ReportRoute
   '/items/$itemId': typeof ItemsItemIdRouteWithChildren
   '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/dashboard'
     | '/report'
     | '/items/$itemId'
     | '/items/$itemId/claim'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/dashboard'
     | '/report'
     | '/items/$itemId'
     | '/items/$itemId/claim'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/browse'
+    | '/dashboard'
     | '/report'
     | '/items/$itemId'
     | '/items/$itemId/claim'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   BrowseRoute: typeof BrowseRoute
+  DashboardRoute: typeof DashboardRoute
   ReportRoute: typeof ReportRoute
   ItemsItemIdRoute: typeof ItemsItemIdRouteWithChildren
 }
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/browse'
       fullPath: '/browse'
       preLoaderRoute: typeof BrowseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report': {
@@ -170,6 +190,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   BrowseRoute: BrowseRoute,
+  DashboardRoute: DashboardRoute,
   ReportRoute: ReportRoute,
   ItemsItemIdRoute: ItemsItemIdRouteWithChildren,
 }
