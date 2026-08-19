@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as ItemsItemIdRouteImport } from './routes/items.$itemId'
+import { Route as ItemsItemIdClaimRouteImport } from './routes/items.$itemId.claim'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,20 +41,27 @@ const ItemsItemIdRoute = ItemsItemIdRouteImport.update({
   path: '/items/$itemId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ItemsItemIdClaimRoute = ItemsItemIdClaimRouteImport.update({
+  id: '/claim',
+  path: '/claim',
+  getParentRoute: () => ItemsItemIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
   '/report': typeof ReportRoute
-  '/items/$itemId': typeof ItemsItemIdRoute
+  '/items/$itemId': typeof ItemsItemIdRouteWithChildren
+  '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
   '/report': typeof ReportRoute
-  '/items/$itemId': typeof ItemsItemIdRoute
+  '/items/$itemId': typeof ItemsItemIdRouteWithChildren
+  '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +69,34 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/browse': typeof BrowseRoute
   '/report': typeof ReportRoute
-  '/items/$itemId': typeof ItemsItemIdRoute
+  '/items/$itemId': typeof ItemsItemIdRouteWithChildren
+  '/items/$itemId/claim': typeof ItemsItemIdClaimRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/browse' | '/report' | '/items/$itemId'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/browse'
+    | '/report'
+    | '/items/$itemId'
+    | '/items/$itemId/claim'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/browse' | '/report' | '/items/$itemId'
-  id: '__root__' | '/' | '/admin' | '/browse' | '/report' | '/items/$itemId'
+  to:
+    | '/'
+    | '/admin'
+    | '/browse'
+    | '/report'
+    | '/items/$itemId'
+    | '/items/$itemId/claim'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/browse'
+    | '/report'
+    | '/items/$itemId'
+    | '/items/$itemId/claim'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,7 +104,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BrowseRoute: typeof BrowseRoute
   ReportRoute: typeof ReportRoute
-  ItemsItemIdRoute: typeof ItemsItemIdRoute
+  ItemsItemIdRoute: typeof ItemsItemIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -116,15 +144,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ItemsItemIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/items/$itemId/claim': {
+      id: '/items/$itemId/claim'
+      path: '/claim'
+      fullPath: '/items/$itemId/claim'
+      preLoaderRoute: typeof ItemsItemIdClaimRouteImport
+      parentRoute: typeof ItemsItemIdRoute
+    }
   }
 }
+
+interface ItemsItemIdRouteChildren {
+  ItemsItemIdClaimRoute: typeof ItemsItemIdClaimRoute
+}
+
+const ItemsItemIdRouteChildren: ItemsItemIdRouteChildren = {
+  ItemsItemIdClaimRoute: ItemsItemIdClaimRoute,
+}
+
+const ItemsItemIdRouteWithChildren = ItemsItemIdRoute._addFileChildren(
+  ItemsItemIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   BrowseRoute: BrowseRoute,
   ReportRoute: ReportRoute,
-  ItemsItemIdRoute: ItemsItemIdRoute,
+  ItemsItemIdRoute: ItemsItemIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

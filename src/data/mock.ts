@@ -139,3 +139,93 @@ export const stats = [
   { label: "Active listings", value: "146" },
   { label: "Return rate", value: "71%" },
 ];
+
+export type VerificationQuestion = {
+  id: string;
+  question: string;
+};
+
+export const verificationQuestions: VerificationQuestion[] = [
+  { id: "q1", question: "Describe any unique mark, sticker or damage on the item." },
+  { id: "q2", question: "What colour is the item and are there any secondary colours?" },
+  { id: "q3", question: "List anything that was inside or attached to the item." },
+  { id: "q4", question: "If applicable, give the serial number or IMEI (or the last 4 digits)." },
+];
+
+export type ClaimRecord = {
+  id: string;
+  reference: string;
+  itemName: string;
+  submitted: string;
+  status: "under_review" | "verification_pending" | "approved" | "rejected";
+  handoverCode?: string;
+};
+
+export const myClaims: ClaimRecord[] = [
+  {
+    id: "c1",
+    reference: "CLM-2026-000042",
+    itemName: "Black Student ID Card",
+    submitted: "2026-08-16",
+    status: "approved",
+    handoverCode: "UG-LF-48213",
+  },
+  {
+    id: "c2",
+    reference: "CLM-2026-000039",
+    itemName: "Blue Backpack",
+    submitted: "2026-08-14",
+    status: "under_review",
+  },
+];
+
+export const claimStatusLabels: Record<ClaimRecord["status"], string> = {
+  under_review: "Under review",
+  verification_pending: "Awaiting your answers",
+  approved: "Approved — collect item",
+  rejected: "Not approved",
+};
+
+export type NotificationRecord = {
+  id: string;
+  title: string;
+  body: string;
+  time: string;
+  unread: boolean;
+  kind: "match" | "claim" | "handover" | "admin";
+};
+
+export const notifications: NotificationRecord[] = [
+  {
+    id: "n1",
+    kind: "match",
+    title: "Possible match found (92%)",
+    body: "A found Student ID Card at Balme Library closely matches your lost report.",
+    time: "2 hours ago",
+    unread: true,
+  },
+  {
+    id: "n2",
+    kind: "claim",
+    title: "Claim CLM-2026-000042 approved",
+    body: "Collect your item at the Balme Library help desk with code UG-LF-48213.",
+    time: "Yesterday",
+    unread: true,
+  },
+  {
+    id: "n3",
+    kind: "handover",
+    title: "Handover scheduled",
+    body: "Your handover is scheduled for Thursday, 10:00 at the Student Affairs office.",
+    time: "2 days ago",
+    unread: false,
+  },
+  {
+    id: "n4",
+    kind: "admin",
+    title: "Report received",
+    body: "Thanks for flagging a suspicious claim — a moderator is reviewing it.",
+    time: "4 days ago",
+    unread: false,
+  },
+];
